@@ -1,0 +1,26 @@
+{
+  "name": "platform-homebroker",
+  "version": "1.0.0",
+  "description": "Platform for Homebroker Trading",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [],
+  "author": "João Vitor de Sousa Pereira",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^22.15.14",
+    "express": "^5.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/jest": "^29.5.14",
+    "axios": "^1.9.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.2"
+  }
+}
