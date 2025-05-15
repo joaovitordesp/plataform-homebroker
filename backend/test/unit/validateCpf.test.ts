@@ -1,4 +1,4 @@
-import { validateCpf } from "../src/validateCpf";
+import { validateCpf } from "../../src/validateCpf";
 
 test.each(["12345678901", "12345678902", "12345678903"])(
   "should validate the cpf %s",
