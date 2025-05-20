@@ -2,7 +2,7 @@ import axios from "axios";
 
 axios.defaults.validateStatus = () => true;
 
-test("Deve criar uma conta válida", async () => {
+test("Should be create a valid account", async () => {
   const inputSignup = {
     name: "John Doe",
     email: "john.doe@gmail.com",
@@ -24,7 +24,7 @@ test("Deve criar uma conta válida", async () => {
   expect(outputGetAccount.document).toBe(inputSignup.document);
 });
 
-test("Não deve criar uma conta com nome inválido", async () => {
+test("Should not be create a account with invalid name", async () => {
   const inputSignup = {
     name: "John",
     email: "john.doe@gmail.com",
@@ -40,7 +40,7 @@ test("Não deve criar uma conta com nome inválido", async () => {
   expect(outputSignup.error).toBe("Invalid name");
 });
 
-test("Deve fazer um depósito", async () => {
+test("Should be make a deposit", async () => {
   const inputSignup = {
     name: "John Doe",
     email: "john.doe@gmail.com",
@@ -67,7 +67,7 @@ test("Deve fazer um depósito", async () => {
   expect(outputGetAccount.assets[0].quantity).toBe(10);
 });
 
-test("Deve fazer um saque", async () => {
+test("Should be make a withdraw", async () => {
   const inputSignup = {
     name: "John Doe",
     email: "john.doe@gmail.com",
@@ -100,7 +100,7 @@ test("Deve fazer um saque", async () => {
   expect(outputGetAccount.assets[0].quantity).toBe(5);
 });
 
-test("Não deve fazer um saque sem fundos", async () => {
+test("Should not be make a withdraw with insufficient funds", async () => {
   const inputSignup = {
     name: "John Doe",
     email: "john.doe@gmail.com",
@@ -131,7 +131,7 @@ test("Não deve fazer um saque sem fundos", async () => {
   expect(outputWithdraw.error).toBe("Insufficient funds");
 });
 
-test("Deve criar uma ordem de venda", async () => {
+test("Should be create a sell order", async () => {
   const inputSignup = {
     name: "John Doe",
     email: "john.doe@gmail.com",

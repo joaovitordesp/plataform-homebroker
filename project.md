@@ -217,9 +217,9 @@ Segue abaixo o modelo de dados relacional do projeto:
 
 <pre>
 
-create schema ccca;
+create schema plat;
 
-create table ccca.account (
+create table plat.account (
 	account_id uuid,
 	name text,
 	email text,
@@ -228,14 +228,14 @@ create table ccca.account (
 	primary key (account_id)
 );
 
-create table ccca.account_asset (
+create table platform_trading_db.account_asset (
 	account_id uuid,
 	asset_id text,
 	quantity numeric,
 	primary key (account_id, asset_id)
 );
 
-create table ccca.order (
+create table plat.order (
 	order_id uuid,
 	market_id text,
 	account_id uuid,
@@ -249,7 +249,7 @@ create table ccca.order (
 	primary key (order_id)
 );
 
-create table ccca.trade (
+create table plat.trade (
 	trade_id uuid,
 	market_id text,
 	buy_order_id uuid,
