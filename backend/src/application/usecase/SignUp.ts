@@ -6,7 +6,6 @@ export default class Signup {
   constructor(readonly accountRepository: AccountRepository) {}
 
   async execute(input: any): Promise<any> {
-    const accountId = crypto.randomUUID();
     const account = Account.create(
       input.name,
       input.email,
@@ -16,7 +15,7 @@ export default class Signup {
 
     await this.accountRepository.saveAccount(account);
     return {
-      accountId,
+      accountId: account.accountId,
     };
   }
 }
