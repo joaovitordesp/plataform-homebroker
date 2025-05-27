@@ -3,10 +3,10 @@ export default class AccountAsset {
     readonly accountId: string,
     readonly assetId: string,
     private quantity: number
-  ) {}
+  ) { }
 
   withdraw(quantity: number) {
-    if (quantity < this.quantity) throw new Error("Insufficient funds");
+    if (this.quantity < quantity) throw new Error("Insufficient funds");
     this.quantity -= quantity;
   }
 

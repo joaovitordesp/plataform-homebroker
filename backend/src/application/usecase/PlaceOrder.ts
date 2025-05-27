@@ -1,21 +1,16 @@
 import Order from "../../domain/Order";
-import OrderDAO from "../../infra/repository/OrderRepository";
-
+import OrderRepository from "../../infra/repository/OrderRepository";
+import { Mediator } from "../../infra/mediator/Mediator";
 export default class PlaceOrder {
-  constructor(readonly orderDAO: OrderDAO) {}
+  constructor(readonly orderRepository: OrderRepository, readonly mediator: Mediator = new Mediator()) { }
 
   async execute(input: Input): Promise<Output> {
-    const order = Order.create(
-      input.marketId,
-      input.accountId,
-      input.side,
-      input.quantity,
-      input.price
-    );
-    await this.orderDAO.saveOrder(order);
+    const order = Order.create(input.marketId, input.accountId, input.side, input.quantity, input.price);
+    await this.orderRepository.saveOrder(order);
+    await this.mediator.notifyAll("orderPlaced", { marketId: input.marketId });
     return {
-      orderId: order.orderId,
-    };
+      orderId: order.orderId
+    }
   }
 }
 

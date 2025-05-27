@@ -28,14 +28,11 @@ export default class AccountController {
       await withdraw.execute(input);
     });
 
-    httpServer.route(
-      "get",
-      "/accounts/:accountId",
-      async (params: any, body: any) => {
-        const accountId = params.accountId;
-        const output = await getAccount.execute(accountId);
-        return output;
-      }
+    httpServer.route("get", "/accounts/:accountId", async (params: any, body: any) => {
+      const accountId = params.accountId;
+      const output = await getAccount.execute(accountId);
+      return output;
+    }
     );
   }
 }

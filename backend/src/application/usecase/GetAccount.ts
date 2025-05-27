@@ -1,13 +1,12 @@
 import AccountRepository from "../../infra/repository/AccountRepository";
 
 export default class GetAccount {
-  constructor(readonly accountRepository: AccountRepository) {}
+  constructor(readonly accountRepository: AccountRepository) { }
 
   async execute(accountId: string): Promise<Output> {
     const account = await this.accountRepository.getAccountById(accountId);
-    const accountAssetsData = await this.accountRepository.getAccountAssets(
-      accountId
-    );
+    const accountAssetsData = await this.accountRepository.getAccountAssets(accountId);
+
     const output: Output = {
       accountId: account.accountId,
       name: account.name,
@@ -16,6 +15,7 @@ export default class GetAccount {
       password: account.password,
       assets: [],
     };
+
     for (const accountAssetData of accountAssetsData) {
       output.assets.push({
         assetId: accountAssetData.assetId,

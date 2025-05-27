@@ -1,20 +1,28 @@
-import { validateCpf } from "./../domain/validateCpf";
-import { validatePassword } from "./../domain/validatePassword";
+import Document from "./Document";
+import Email from "./Email";
+import Name from "./Name";
+import Password from "./Password";
 import crypto from "crypto";
 
 export default class Account {
+  private _name: Name;
+  private _email: Email;
+  private _document: Document;
+  private _password: Password;
+
   constructor(
     readonly accountId: string,
-    readonly name: string,
-    readonly email: string,
-    readonly document: string,
-    readonly password: string
+    name: string,
+    email: string,
+    document: string,
+    password: string
   ) {
-    if (!this.isValidName(name)) throw new Error("Invalid name");
-    if (!this.isValidEmail(email)) throw new Error("Invalid email");
-    if (!validateCpf(document)) throw new Error("Invalid document");
-    if (!validatePassword(password)) throw new Error("Invalid password");
+    this._name = new Name(name);
+    this._email = new Email(email);
+    this._document = new Document(document);
+    this._password = new Password(password);
   }
+
   static create(
     name: string,
     email: string,
@@ -25,11 +33,20 @@ export default class Account {
     return new Account(accountId, name, email, document, password);
   }
 
-  isValidName(name: string) {
-    return name.match(/[a-zA-Z] [a-zA-Z]+/);
+  get name() {
+    return this._name.getValue();
   }
 
-  isValidEmail(email: string) {
-    return email.match(/^(.+)\@(.+)$/);
+  get email() {
+    return this._email.getValue();
   }
+
+  get document() {
+    return this._document.getValue();
+  }
+
+  get password() {
+    return this._password.getValue();
+  }
+
 }

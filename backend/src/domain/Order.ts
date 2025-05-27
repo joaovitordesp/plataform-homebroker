@@ -8,9 +8,11 @@ export default class Order {
     readonly side: string,
     readonly quantity: number,
     readonly price: number,
-    readonly status: string,
-    readonly timeStamp: Date
-  ) {}
+    public status: string,
+    readonly timeStamp: Date,
+    public fillQuantity: number = 0,
+    public fillPrice: number = 0
+  ) { }
 
   static create(
     marketId: string,
@@ -19,18 +21,35 @@ export default class Order {
     quantity: number,
     price: number
   ) {
+    const orderId = crypto.randomUUID();
     const status = "open";
     const timeStamp = new Date();
-    const order = new Order(
-      crypto.randomUUID(),
+    const fillQuantity = 0;
+    const fillPrice = 0;
+
+    return new Order(
+      orderId,
       marketId,
       accountId,
       side,
       quantity,
       price,
       status,
-      timeStamp
+      timeStamp,
+      fillQuantity,
+      fillPrice
     );
-    return order;
+  }
+
+  fill(quantity: number, price: number) {
+    this.fillPrice = ((this.fillQuantity * this.fillPrice) + (quantity * price)) / (this.fillQuantity + quantity);
+    this.fillQuantity += quantity;
+    if (this.getAvailableQuantity() === 0) {
+      this.status = "closed";
+    }
+  }
+
+  getAvailableQuantity() {
+    return this.quantity - this.fillQuantity;
   }
 }
