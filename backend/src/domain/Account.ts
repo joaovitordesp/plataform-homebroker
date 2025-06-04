@@ -1,16 +1,18 @@
+import Asset from "./Asset";
 import Document from "./Document";
 import Email from "./Email";
 import Name from "./Name";
 import Password from "./Password";
-import Asset from "./Asset";
 import crypto from "crypto";
 
+// Aggregate Account onde o AR = Account
 export default class Account {
   private _name: Name;
   private _email: Email;
   private _document: Document;
   private _password: Password;
-  private assets: Asset[]
+  // Asset é uma outra entity
+  private assets: Asset[];
 
   constructor(
     readonly accountId: string,
@@ -57,15 +59,11 @@ export default class Account {
   deposit(assetId: string, quantity: number) {
     if (quantity < 0) throw new Error("Invalid quantity");
     const asset = this.assets.find((asset: Asset) => asset.assetId === assetId);
-
     if (asset) {
       asset.quantity += quantity;
     } else {
       this.assets.push(new Asset(this.accountId, assetId, quantity));
     }
-
-    if (!asset || asset.quantity < quantity) throw new Error("Insufficient funds");
-    asset.quantity -= quantity;
   }
 
   withdraw(assetId: string, quantity: number) {
@@ -73,6 +71,12 @@ export default class Account {
     const asset = this.assets.find((asset: Asset) => asset.assetId === assetId);
     if (!asset || asset.quantity < quantity) throw new Error("Insufficient funds");
     asset.quantity -= quantity;
+  }
+
+  getBalance(assetId: string) {
+    const asset = this.assets.find((asset: Asset) => asset.assetId === assetId);
+    if (!asset) return 0;
+    return asset.quantity;
   }
 
   getAssets() {

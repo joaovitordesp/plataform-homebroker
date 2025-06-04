@@ -1,6 +1,7 @@
 import axios from "axios";
 
 async function main() {
+    const marketId = `BTC/USD${Math.random()}`;
     const inputSignup = {
         name: "John Doe",
         email: "john.doe@gmail.com",
@@ -11,7 +12,7 @@ async function main() {
     const outputSignup = responseSignup.data;
     while (true) {
         const inputPlaceOrder = {
-            marketId: "BTC/USD",
+            marketId,
             accountId: outputSignup.accountId,
             side: (Math.random() > 0.5) ? "sell" : "buy",
             quantity: Math.round(Math.random() * 10) + 1,

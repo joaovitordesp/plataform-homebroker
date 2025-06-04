@@ -13,7 +13,7 @@ export default class GetOrder {
       quantity: orderData.quantity,
       price: orderData.price,
       status: orderData.status,
-      timestamp: orderData.timeStamp,
+      timestamp: orderData.timestamp,
       fillQuantity: orderData.fillQuantity,
       fillPrice: orderData.fillPrice,
     };

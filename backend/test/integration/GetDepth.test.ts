@@ -1,9 +1,7 @@
 import GetDepth from "../../src/application/usecase/GetDepth";
 import PlaceOrder from "../../src/application/usecase/PlaceOrder";
 import Signup from "../../src/application/usecase/SignUp";
-import DatabaseConnection, {
-  PgPromiseAdapter,
-} from "../../src/infra/database/DatabaseConnection";
+import DatabaseConnection, { PgPromiseAdapter } from "../../src/infra/database/DatabaseConnection";
 import { AccountRepositoryDatabase } from "../../src/infra/repository/AccountRepository";
 import { OrderRepositoryDatabase } from "../../src/infra/repository/OrderRepository";
 
@@ -16,45 +14,44 @@ let marketId: string;
 beforeEach(async () => {
   connection = new PgPromiseAdapter();
   const orderRepository = new OrderRepositoryDatabase(connection);
-  await orderRepository.deleteAll();
   const accountRepository = new AccountRepositoryDatabase(connection);
   signup = new Signup(accountRepository);
   placeOrder = new PlaceOrder(orderRepository);
   getDepth = new GetDepth(orderRepository);
-  marketId = "BTC/USD";
+  marketId = `BTC/USD${Math.random()}`;
 });
 
-test("Should return the depth after the realization of buy and sell orders without precision", async () => {
+test("Deve retornar o depth após a realização de ordens de compra e venda sem precision", async () => {
   const inputSignup = {
     name: "John Doe",
     email: "john.doe@gmail.com",
     document: "97456321558",
-    password: "asdQWE123",
-  };
+    password: "asdQWE123"
+  }
   const outputSignup = await signup.execute(inputSignup);
   const inputPlaceOrder1 = {
     marketId,
     accountId: outputSignup.accountId,
     side: "sell",
     quantity: 1,
-    price: 94000,
-  };
+    price: 94000
+  }
   await placeOrder.execute(inputPlaceOrder1);
   const inputPlaceOrder2 = {
     marketId,
     accountId: outputSignup.accountId,
     side: "sell",
     quantity: 1,
-    price: 94500,
-  };
+    price: 94500
+  }
   await placeOrder.execute(inputPlaceOrder2);
   const inputPlaceOrder3 = {
     marketId,
     accountId: outputSignup.accountId,
     side: "sell",
     quantity: 1,
-    price: 94600,
-  };
+    price: 94600
+  }
   await placeOrder.execute(inputPlaceOrder3);
   const outputGetDepth = await getDepth.execute(marketId, 0);
   expect(outputGetDepth.sells).toHaveLength(3);
@@ -67,37 +64,37 @@ test("Should return the depth after the realization of buy and sell orders witho
   expect(outputGetDepth.buys).toHaveLength(0);
 });
 
-test("Should return the depth after the realization of buy and sell orders without precision but with equal values", async () => {
+test("Deve retornar o depth após a realização de ordens de compra e venda sem precision mas com valores iguais", async () => {
   const inputSignup = {
     name: "John Doe",
     email: "john.doe@gmail.com",
     document: "97456321558",
-    password: "asdQWE123",
-  };
+    password: "asdQWE123"
+  }
   const outputSignup = await signup.execute(inputSignup);
   const inputPlaceOrder1 = {
     marketId,
     accountId: outputSignup.accountId,
     side: "sell",
     quantity: 1,
-    price: 94000,
-  };
+    price: 94000
+  }
   await placeOrder.execute(inputPlaceOrder1);
   const inputPlaceOrder2 = {
     marketId,
     accountId: outputSignup.accountId,
     side: "sell",
     quantity: 1,
-    price: 94000,
-  };
+    price: 94000
+  }
   await placeOrder.execute(inputPlaceOrder2);
   const inputPlaceOrder3 = {
     marketId,
     accountId: outputSignup.accountId,
     side: "sell",
     quantity: 1,
-    price: 94000,
-  };
+    price: 94000
+  }
   await placeOrder.execute(inputPlaceOrder3);
   const outputGetDepth = await getDepth.execute(marketId, 0);
   expect(outputGetDepth.sells).toHaveLength(1);
@@ -106,37 +103,37 @@ test("Should return the depth after the realization of buy and sell orders witho
   expect(outputGetDepth.buys).toHaveLength(0);
 });
 
-test("Should return the depth after the realization of buy and sell orders with precision of 3 decimal places", async () => {
+test("Deve retornar o depth após a realização de ordens de compra e venda com precision de 3 casas", async () => {
   const inputSignup = {
     name: "John Doe",
     email: "john.doe@gmail.com",
     document: "97456321558",
-    password: "asdQWE123",
-  };
+    password: "asdQWE123"
+  }
   const outputSignup = await signup.execute(inputSignup);
   const inputPlaceOrder1 = {
     marketId,
     accountId: outputSignup.accountId,
     side: "sell",
     quantity: 1,
-    price: 94000,
-  };
+    price: 94000
+  }
   await placeOrder.execute(inputPlaceOrder1);
   const inputPlaceOrder2 = {
     marketId,
     accountId: outputSignup.accountId,
     side: "sell",
     quantity: 1,
-    price: 94500,
-  };
+    price: 94500
+  }
   await placeOrder.execute(inputPlaceOrder2);
   const inputPlaceOrder3 = {
     marketId,
     accountId: outputSignup.accountId,
     side: "sell",
     quantity: 1,
-    price: 94600,
-  };
+    price: 94600
+  }
   await placeOrder.execute(inputPlaceOrder3);
   const outputGetDepth = await getDepth.execute(marketId, 3);
   expect(outputGetDepth.sells).toHaveLength(1);
@@ -147,4 +144,4 @@ test("Should return the depth after the realization of buy and sell orders with 
 
 afterEach(async () => {
   await connection.close();
-});
+})

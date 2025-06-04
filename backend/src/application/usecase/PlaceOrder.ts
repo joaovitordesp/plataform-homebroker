@@ -1,8 +1,12 @@
 import Order from "../../domain/Order";
-import OrderRepository from "../../infra/repository/OrderRepository";
 import { Mediator } from "../../infra/mediator/Mediator";
+import OrderRepository from "../../infra/repository/OrderRepository";
+import GetDepth from "./GetDepth";
+
 export default class PlaceOrder {
-  constructor(readonly orderRepository: OrderRepository, readonly mediator: Mediator = new Mediator()) { }
+
+  constructor(readonly orderRepository: OrderRepository, readonly mediator: Mediator = new Mediator()) {
+  }
 
   async execute(input: Input): Promise<Output> {
     const order = Order.create(input.marketId, input.accountId, input.side, input.quantity, input.price);
@@ -15,13 +19,13 @@ export default class PlaceOrder {
 }
 
 type Input = {
-  marketId: string;
-  accountId: string;
-  side: string;
-  quantity: number;
-  price: number;
-};
+  marketId: string,
+  accountId: string,
+  side: string,
+  quantity: number,
+  price: number
+}
 
 type Output = {
-  orderId: string;
-};
+  orderId: string
+}

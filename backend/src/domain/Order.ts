@@ -9,7 +9,7 @@ export default class Order {
     readonly quantity: number,
     readonly price: number,
     public status: string,
-    readonly timeStamp: Date,
+    readonly timestamp: Date,
     public fillQuantity: number = 0,
     public fillPrice: number = 0
   ) { }
@@ -23,7 +23,7 @@ export default class Order {
   ) {
     const orderId = crypto.randomUUID();
     const status = "open";
-    const timeStamp = new Date();
+    const timestamp = new Date();
     const fillQuantity = 0;
     const fillPrice = 0;
 
@@ -35,7 +35,7 @@ export default class Order {
       quantity,
       price,
       status,
-      timeStamp,
+      timestamp,
       fillQuantity,
       fillPrice
     );
@@ -48,6 +48,7 @@ export default class Order {
       this.status = "closed";
     }
   }
+
 
   getAvailableQuantity() {
     return this.quantity - this.fillQuantity;

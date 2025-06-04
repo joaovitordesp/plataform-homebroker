@@ -1,6 +1,6 @@
 import Account from "../../domain/Account";
-import Asset from "../../domain/Asset";
 import AccountAsset from "../../domain/AccountAsset";
+import Asset from "../../domain/Asset";
 import DatabaseConnection from "../database/DatabaseConnection";
 
 export default interface AccountRepository {
@@ -20,8 +20,8 @@ export class AccountRepositoryDatabase implements AccountRepository {
   }
 
   async updateAccount(account: Account): Promise<void> {
-    await this.connection.query("delete from platform_trading_db.account where account_id = $1", [account.accountId]);
-
+    // update platform_trading_db.account set name, email, document, password...
+    await this.connection.query("delete from platform_trading_db.account_asset where account_id = $1", [account.accountId]);
     for (const asset of account.getAssets()) {
       await this.connection.query("insert into platform_trading_db.account_asset (account_id, asset_id, quantity) values ($1, $2, $3)", [asset.accountId, asset.assetId, asset.quantity]);
     }
@@ -30,25 +30,25 @@ export class AccountRepositoryDatabase implements AccountRepository {
   async getAccountById(accountId: string): Promise<Account> {
     const [accountData] = await this.connection.query("select * from platform_trading_db.account where account_id = $1", [accountId]);
     const accountAssetsData = await this.connection.query("select * from platform_trading_db.account_asset where account_id = $1", [accountId]);
-
     const assets: Asset[] = [];
     for (const accountAssetData of accountAssetsData) {
       assets.push(new Asset(accountAssetData.account_id, accountAssetData.asset_id, parseFloat(accountAssetData.quantity)));
     }
-
     return new Account(accountData.account_id, accountData.name, accountData.email, accountData.document, accountData.password, assets);
   }
+
 }
 
 export class AccountRepositoryMemory implements AccountRepository {
-  updateAccount(account: Account): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
 
   accounts: any = [];
 
   async saveAccount(account: any): Promise<void> {
     this.accounts.push(account);
+  }
+
+  async updateAccount(account: Account): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 
   async getAccountById(accountId: string): Promise<any> {

@@ -4,13 +4,13 @@ import Order from "./Order";
 import Trade from "./Trade";
 
 export default class Book {
-    buys: Order[] = [];
-    sells: Order[] = [];
+    buys: Order[];
+    sells: Order[];
 
     constructor(readonly marketId: string, readonly mediator: Mediator) {
         this.buys = [];
         this.sells = [];
-        this.mediator = mediator;
+        // this.mediator = mediator;
     }
 
     async insert(order: Order) {
@@ -35,8 +35,8 @@ export default class Book {
             if (highestBuy.price < lowestSell.price) break;
 
             const fillQuantity = Math.min(highestBuy.getAvailableQuantity(), lowestSell.getAvailableQuantity());
-            const fillPrice = (highestBuy.timeStamp.getTime() > lowestSell.timeStamp.getTime()) ? lowestSell.price : highestBuy.price;
-            const tradeSide = (highestBuy.timeStamp.getTime() > lowestSell.timeStamp.getTime()) ? "buy" : "sell";
+            const fillPrice = (highestBuy.timestamp.getTime() > lowestSell.timestamp.getTime()) ? lowestSell.price : highestBuy.price;
+            const tradeSide = (highestBuy.timestamp.getTime() > lowestSell.timestamp.getTime()) ? "buy" : "sell";
 
             highestBuy.fill(fillQuantity, fillPrice);
             lowestSell.fill(fillQuantity, fillPrice);
@@ -48,7 +48,7 @@ export default class Book {
             await this.mediator.notifyAll("orderFilled", lowestSell);
 
             const trade = Trade.create(highestBuy.marketId, highestBuy.orderId, lowestSell.orderId, tradeSide, fillQuantity, fillPrice);
-            await this.mediator.notifyAll("tradeExecuted", trade);
+            await this.mediator.notifyAll("tradeCreated", trade);
         }
     }
 
