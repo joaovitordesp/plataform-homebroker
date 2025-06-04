@@ -1,16 +1,13 @@
 import AccountAsset from "../../domain/AccountAsset";
-import AccountDAO from "../../infra/repository/AccountRepository";
+import AccountRepository from "../../infra/repository/AccountRepository";
 
 export default class Deposit {
-  constructor(readonly accountDAO: AccountDAO) {}
+  constructor(readonly accountRepository: AccountRepository) { }
 
   async execute(input: Input) {
-    const accountAsset = new AccountAsset(
-      input.accountId,
-      input.assetId,
-      input.quantity
-    );
-    await this.accountDAO.saveAccountAsset(accountAsset);
+    const account = await this.accountRepository.getAccountById(input.accountId);
+    account.deposit(input.assetId, input.quantity);
+    await this.accountRepository.updateAccount(account);
   }
 }
 

@@ -5,7 +5,7 @@ export default class GetAccount {
 
   async execute(accountId: string): Promise<Output> {
     const account = await this.accountRepository.getAccountById(accountId);
-    const accountAssetsData = await this.accountRepository.getAccountAssets(accountId);
+    // const accountAssetsData = await this.accountRepository.getAccountAssets(accountId);
 
     const output: Output = {
       accountId: account.accountId,
@@ -16,11 +16,8 @@ export default class GetAccount {
       assets: [],
     };
 
-    for (const accountAssetData of accountAssetsData) {
-      output.assets.push({
-        assetId: accountAssetData.assetId,
-        quantity: accountAssetData.getQuantity(),
-      });
+    for (const asset of account.getAssets()) {
+      output.assets.push({ assetId: asset.assetId, quantity: asset.quantity });
     }
     return output;
   }
