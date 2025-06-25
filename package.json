@@ -23,10 +23,13 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:db": "docker-compose up -d",
+    "docker:start": "docker-compose up -d",
+    "wait:rabbitmq": "powershell -ExecutionPolicy Bypass -File wait-rabbitmq.ps1",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm run dev",
-    "start": "npm run start:db && concurrently \"npm run start:backend\" \"npm run start:frontend\""
+    "start:account": "cd backend/account && npm start",
+    "start:trade": "cd backend/trade && npm start",
+    "start": "npm run docker:start && npm run wait:rabbitmq && concurrently \"npm run start:account\" \"npm run start:trade\" \"npm run start:frontend\""
   },
   "repository": {
     "type": "git",
