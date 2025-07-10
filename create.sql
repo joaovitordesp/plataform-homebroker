@@ -43,3 +43,12 @@ create table platform_trading_db.trade (
 	timestamp timestamptz,
 	primary key (trade_id)
 );
+
+create table platform_trading_db.depth (
+	market_id text,
+	side text,
+	price numeric,
+	quantity numeric,
+	primary key (market_id, price)
+);
+

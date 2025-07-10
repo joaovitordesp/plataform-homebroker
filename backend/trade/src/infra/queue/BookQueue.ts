@@ -7,8 +7,7 @@ import Queue from "./Queue"
 
 export default class BookQueue {
     static config(queue: Queue, websocketServer: WebSocketServer, bookCache: BookCache) {
-        queue.consume("orderPlaced", async (input: any) => {
-            console.log(input, new Date());
+        queue.consume("orderPlaced.executeOrder", async (input: any) => {
 
             const order = new Order(input.orderId, input.marketId, input.accountId, input.side, input.quantity, input.price, input.status, new Date(input.timestamp), input.fillQuantity, input.fillPrice);
             let book: Book;
